@@ -18,15 +18,17 @@ import org.apache.http.message.BasicNameValuePair;
 
 import com.alibaba.fastjson.JSONObject;
 
-import tech.hongjian.sso.common.model.RestResponse;
-
 /**
  * @author xiahongjian 
  * @time   2018-04-19 16:42:04
  *
  */
 public class HttpUtil {
-	public static RestResponse post(String url, Map<String, String> params) {
+	public static <T> T post(String url, Map<String, String> params, Class<T> clazz) {
+		return JSONObject.parseObject(post(url, params), clazz);
+	}
+	
+	public static String post(String url, Map<String, String> params) {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
 		if (params != null && !params.isEmpty()) {
@@ -40,10 +42,9 @@ public class HttpUtil {
 		}
 		try {
 			CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
-			String json = IOUtils.toString(httpResponse.getEntity().getContent());
-			return JSONObject.parseObject(json, RestResponse.class);
+			return IOUtils.toString(httpResponse.getEntity().getContent());
 		} catch (IOException e) {
 		}
-		return RestResponse.fail();
+		return null;
 	}
 }

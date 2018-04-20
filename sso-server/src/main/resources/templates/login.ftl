@@ -10,6 +10,8 @@
     <form action="/login" method="post">
         <label>Username: </label><input type="text"><br>
         <label>Password: </label><input type="password"><br>
+        <input type="hidden" name="sysUrl" value="${RequestParameters.sysUrl!}">
+        <input type="hidden" name="from" value="${RequestParameters.from!}">
         <input type="submit" value="Login">
     </form>
 </body>

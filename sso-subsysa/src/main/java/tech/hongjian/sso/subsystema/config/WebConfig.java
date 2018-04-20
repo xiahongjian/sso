@@ -1,10 +1,10 @@
-package tech.hongjian.sso.server.config;
+package tech.hongjian.sso.subsystema.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import tech.hongjian.sso.server.LoginInterceptor;
+import tech.hongjian.sso.client.interceptor.AuthInteceptor;
 
 /**
  * @author xiahongjian 
@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**").excludePathPatterns("/sso/**", "/index");
+		registry.addInterceptor(new AuthInteceptor()).addPathPatterns("/**").excludePathPatterns("/", "", "/index");
 	}
 
 }

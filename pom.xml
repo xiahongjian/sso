@@ -26,6 +26,8 @@
 		<module>sso-server</module>
 		<module>sso-common</module>
 		<module>sso-client</module>
+		<module>sso-subsysa</module>
+		<module>sso-subsysb</module>
 	</modules>
 
 	<dependencies>

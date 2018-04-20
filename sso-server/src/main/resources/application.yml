@@ -1,2 +1,10 @@
 server:
   port: 8000
+  
+spring:
+  freemarker:  
+    charset: UTF-8  
+    content-type: text/html; charset=utf-8  
+    expose-request-attributes: true  
+    request-context-attribute: request
+    expose-session-attributes: true  

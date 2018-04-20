@@ -1,4 +1,4 @@
-package tech.hongjian.sso.server.session;
+package tech.hongjian.sso.common.constants;
 
 /**
  * @author xiahongjian 
@@ -6,8 +6,8 @@ package tech.hongjian.sso.server.session;
  *
  */
 public interface WebConstants {
-	String LOGIN_URL = "login.html";
-	String LOGOUT_URL = "logout";
+	String LOGIN_URL = "/login";
+	String LOGOUT_URL = "/logout";
 	String TOKEN_KEY_IN_SESSION = "token";
 	String SYS_URL_PARAM_NAME = "sysUrl";
 	String FROM_URL_PARAM_NAME = "from";

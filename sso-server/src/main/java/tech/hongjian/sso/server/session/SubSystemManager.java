@@ -32,10 +32,11 @@ public enum SubSystemManager {
 		List<String> urls = subSystemMap.containsKey(token) ? subSystemMap.get(token) : new ArrayList<String>();
 		if (StringUtils.isNotBlank(url))
 			urls.add(url);
+		subSystemMap.put(token, urls);
 	}
 	
 	public void remove(String token) {
-		if (!contains(token))
+		if (token == null)
 			return;
 		subSystemMap.remove(token);
 	}

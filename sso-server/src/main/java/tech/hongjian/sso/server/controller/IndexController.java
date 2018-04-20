@@ -1,9 +1,6 @@
 package tech.hongjian.sso.server.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
@@ -14,9 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import tech.hongjian.sso.common.util.HttpUtil;
+import tech.hongjian.sso.common.constants.WebConstants;
 import tech.hongjian.sso.server.session.SubSystemManager;
-import tech.hongjian.sso.server.session.WebConstants;
 
 /**
  * @author xiahongjian
@@ -31,6 +27,11 @@ public class IndexController {
 		return "index";
 	}
 	
+	@GetMapping("/res")
+	public String res() {
+		return "res";
+	}
+	
 	@GetMapping("/login")
 	public String login() {
 		return "login";
@@ -38,13 +39,13 @@ public class IndexController {
 
 	@PostMapping("/login")
 	public void doLogin(HttpServletResponse response, HttpSession session, String username, String password, String from,
-			String systemUrl) throws IOException {
+			String sysUrl) throws IOException {
 		String token = UUID.randomUUID().toString();
 		session.setAttribute(WebConstants.TOKEN_KEY_IN_SESSION, token);
-		SubSystemManager.INSTANCE.addSystemUrl(token, systemUrl);
+		SubSystemManager.INSTANCE.addSystemUrl(token, sysUrl);
 		
 		if (StringUtils.isBlank(from)) {
-			from = systemUrl;
+			from = sysUrl;
 		}
 		if (StringUtils.isBlank(from)) {
 			response.sendRedirect("/index");
@@ -55,17 +56,11 @@ public class IndexController {
 	}
 	
 	@GetMapping("/logout")
-	public void logout(HttpSession session) {
+	public String logout(HttpSession session) {
 		String token = (String) session.getAttribute(WebConstants.TOKEN_KEY_IN_SESSION);
-		// token不为null时为已登录，向各个注册的子系统发送登出通知
-		if (token != null) {
-			List<String> urls = SubSystemManager.INSTANCE.getSubSytems(token);
-			Map<String, String> params = new HashMap<>(1);
-			params.put("token", token);
-			for (String url : urls)
-				HttpUtil.post(url, params);
-		}
+		SubSystemManager.INSTANCE.remove(token);
 		session.invalidate();
+		return "index";
 	}
 	
 }

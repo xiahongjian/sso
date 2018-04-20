@@ -8,11 +8,5 @@
 </head>
 <body>
     <h1>This is index.</h1>
-    <#if (Session.token)??>
-    <a href="/logout">Logout</a>
-    <#else>
-    <a href="/login">Login</a>
-    </#if>
-    
 </body>
 </html>

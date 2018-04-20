@@ -7,8 +7,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import tech.hongjian.sso.common.constants.WebConstants;
 import tech.hongjian.sso.server.session.SubSystemManager;
-import tech.hongjian.sso.server.session.WebConstants;
 
 /**
  * @author xiahongjian 
