@@ -28,17 +28,16 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		// 已经登录
 		if (token != null) {
 			String systemUrl = request.getParameter(WebConstants.SYS_URL_PARAM_NAME);
+			if (StringUtils.isBlank(systemUrl))
+				return true;
 			// 如果systemUrl参数不为空，则是从子系统跳转过来的，重定向会原系统
-			if (StringUtils.isNoneBlank(systemUrl)) {
-				// 记录子系统Url，用户登出时向各个子系统发送登录通知
-				SubSystemManager.INSTANCE.addSystemUrl(token, systemUrl);
-				String url = request.getParameter(WebConstants.FROM_URL_PARAM_NAME);
-				if (StringUtils.isBlank(url))
-					url = systemUrl;
-				response.sendRedirect(url + (url.contains("?") ? "&" : "?") + "token=" + token);
-				return false;
-			}
-			return true;
+			// 记录子系统Url，用户登出时向各个子系统发送登录通知
+			SubSystemManager.INSTANCE.addSystemUrl(token, systemUrl);
+			String url = request.getParameter(WebConstants.FROM_URL_PARAM_NAME);
+			if (StringUtils.isBlank(url))
+				url = systemUrl;
+			response.sendRedirect(url + (url.contains("?") ? "&" : "?") + "token=" + token);
+			return false;
 		}
 		if (WebConstants.LOGIN_URL.equals(uri))
 			return true;
