@@ -29,15 +29,21 @@ public enum SubSystemManager {
 	}
 
 	public void addSystemUrl(String token, String url) {
-		List<String> urls = subSystemMap.containsKey(token) ? subSystemMap.get(token) : new ArrayList<String>();
-		if (StringUtils.isNotBlank(url))
-			urls.add(url);
-		subSystemMap.put(token, urls);
+		if (StringUtils.isBlank(token))
+			return;
+		List<String> urls;
+		if (subSystemMap.containsKey(token)) {
+			urls = subSystemMap.get(token);
+		} else {
+			urls = new ArrayList<String>(1);
+			subSystemMap.put(token, urls);
+		}
+		urls.add(url);
 	}
 	
-	public void remove(String token) {
+	public List<String> remove(String token) {
 		if (token == null)
-			return;
-		subSystemMap.remove(token);
+			return Collections.emptyList();
+		return subSystemMap.remove(token);
 	}
 }

@@ -33,11 +33,16 @@ public class AuthInteceptor extends HandlerInterceptorAdapter {
 		if (WebConstants.LOGOUT_URL.equals(uri)) {
 			return true;
 		}
+		
+		// 已登录
+		if (session.getAttribute(WebConstants.TOKEN_KEY_IN_SESSION) != null) {
+			return true;
+		}
 
 		String requestToken = request.getParameter("token");
 		// 带有token，为从认证系统调整过来的
 		if (StringUtils.isNotBlank(requestToken)) {
-			RestResponse res = HttpUtil.post(SSOConfigUtil.getValidateUrl(), new HashMap<String, String>() {
+			RestResponse<?> res = HttpUtil.post(SSOConfigUtil.getValidateUrl(), new HashMap<String, String>() {
 				{
 					put("token", requestToken);
 				}

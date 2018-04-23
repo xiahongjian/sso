@@ -11,4 +11,5 @@ public interface WebConstants {
 	String TOKEN_KEY_IN_SESSION = "token";
 	String SYS_URL_PARAM_NAME = "sysUrl";
 	String FROM_URL_PARAM_NAME = "from";
+	String HANDLE_LOGOUT_NOTIFY_PATH = "/sso/logoutNotify";
 }

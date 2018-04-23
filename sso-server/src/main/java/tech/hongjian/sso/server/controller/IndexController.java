@@ -1,6 +1,8 @@
 package tech.hongjian.sso.server.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import tech.hongjian.sso.common.constants.WebConstants;
+import tech.hongjian.sso.common.util.HttpUtil;
 import tech.hongjian.sso.server.session.SubSystemManager;
 
 /**
@@ -52,13 +55,18 @@ public class IndexController {
 			return;
 		}
 		// 重定向到子系统
-		response.sendRedirect(from + (from.contains("?") ? "&" : ":") + "token=" + token);
+		response.sendRedirect(from + (from.contains("?") ? "&" : "?") + "token=" + token);
 	}
-	
+	 
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		String token = (String) session.getAttribute(WebConstants.TOKEN_KEY_IN_SESSION);
-		SubSystemManager.INSTANCE.remove(token);
+		if (StringUtils.isNotBlank(token)) {
+			List<String> urls = SubSystemManager.INSTANCE.remove(token);
+			// 通知各个子系统销毁会话
+			for (String url : urls)
+				HttpUtil.post(url + WebConstants.HANDLE_LOGOUT_NOTIFY_PATH, new HashMap<String, String>(1){{put("token", token);}});
+		}
 		session.invalidate();
 		return "index";
 	}

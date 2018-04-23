@@ -5,8 +5,11 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import tech.hongjian.sso.client.session.ClientSessionManager;
 import tech.hongjian.sso.common.constants.WebConstants;
+import tech.hongjian.sso.common.model.RestResponse;
 import tech.hongjian.sso.common.util.SSOConfigUtil;
 
 /**
@@ -33,7 +36,16 @@ public class IndexController {
 		if (StringUtils.isBlank(token))
 			return "redirect:/";
 		// 重定向到认证系统的登出Url
-		String logoutUrl = SSOConfigUtil.getLogoutUrl() + (SSOConfigUtil.getLogoutUrl().contains("?") ? "&" : "?") + "token=" + token;
-		return "redirect:" + logoutUrl;
+		return "redirect:" + SSOConfigUtil.getLogoutUrl();
+	}
+	
+	@RequestMapping(value = WebConstants.HANDLE_LOGOUT_NOTIFY_PATH)
+	public RestResponse<?> handleLogoutNotify(String token) {
+		if (StringUtils.isBlank(token))
+			return RestResponse.fail();
+		// 销毁session
+		HttpSession session = ClientSessionManager.INSTANCE.remove(token);
+		session.invalidate();
+		return RestResponse.ok();
 	}
 }
